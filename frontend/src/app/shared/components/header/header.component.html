@@ -1,0 +1,26 @@
+<div class="header">
+    <div class="header__title">
+        <a routerLink="/network">LinkedOut</a>
+    </div>
+    @if (currentUser$ | async; as user) {
+    <app-avatar [firstName]="user.firstName || 'Gengiu'" [lastName]="user.lastName || 'Robert'"></app-avatar>
+    }
+</div>
+<div class="header__actions">
+    @if (isDarkTheme$ | async; as isDarkTheme) {
+    <button (click)="toggleTheme()" mat-icon-button>
+        <mat-icon>{{ isDarkTheme ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+    } @else {
+    <button (click)="toggleTheme()" mat-icon-button>
+        <mat-icon>dark_mode</mat-icon>
+    </button>
+    }
+    <button class="hamburger-menu" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item class="settings-button" (click)="goToSettings()">
+            <mat-icon>settings</mat-icon>
+            Settings
+        </button>
+    </mat-menu>
+</div>

@@ -1,0 +1,12 @@
+<app-header></app-header>
+<div style="display: flex; min-height: 100vh;">
+
+    @if (isAuthenticated$ | async) {
+    <app-sidebar></app-sidebar>
+    }
+
+    <main style="flex-grow: 1; height: 100vh; overflow-y: auto; background-color: var(--mat-sys-background);">
+        <router-outlet></router-outlet>
+    </main>
+
+</div>

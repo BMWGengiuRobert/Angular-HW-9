@@ -1,0 +1,63 @@
+<nav class="sidebar" [class.collapsed]="isCollapsed">
+    <mat-nav-list class="nav-links">
+
+        <a mat-list-item routerLink="/network" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>home</mat-icon>
+            <span class="hide-on-collapse">Network</span>
+        </a>
+
+        <a mat-list-item routerLink="/companies" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>business</mat-icon>
+            <span class="hide-on-collapse">Companies</span>
+        </a>
+
+        <a mat-list-item routerLink="/jobs" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>work</mat-icon>
+            <span class="hide-on-collapse">Jobs</span>
+        </a>
+
+        <a mat-list-item routerLink="/settings" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>settings</mat-icon>
+            <span class="hide-on-collapse">Settings</span>
+        </a>
+
+        @if (user$ | async; as navUser) {
+        <a mat-list-item [routerLink]="['/profile', navUser.id]" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <span class="hide-on-collapse">My Profile</span>
+        </a>
+        }
+
+    </mat-nav-list>
+
+    <div class="sidebar-bottom">
+        @if (user$ | async; as user) {
+        <div class="user-profile" [routerLink]="['/profile', user.id]">
+            <app-avatar [firstName]="user.firstName" [lastName]="user.lastName"></app-avatar>
+            @if(!isCollapsed) {
+            <div class="user-info">
+                <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                <small>{{ user.headline }}</small>
+            </div>
+            }
+        </div>
+        }
+
+        <div class="logout-container">
+            @if(isCollapsed) {
+            <button mat-icon-button color="primary" (click)="logout()">
+                <mat-icon>logout</mat-icon>
+            </button>
+            } @else {
+            <button mat-stroked-button color="primary" (click)="logout()">
+                <mat-icon>logout</mat-icon> Logout
+            </button>
+            }
+        </div>
+
+        <button class="toggle-btn" mat-icon-button (click)="toggleSidebar()">
+            <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+        </button>
+    </div>
+
+</nav>
