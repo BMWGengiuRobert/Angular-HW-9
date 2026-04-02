@@ -1,0 +1,49 @@
+h1 {
+    margin-left: 1rem;
+}
+
+.table-container {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 0 1rem;
+    overflow: auto;
+
+    .name-and-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        img {
+            border-radius: 4px;
+            object-fit: cover;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .mat-mdc-row {
+        transition: background-color 0.1s ease-in-out;
+
+        &:hover {
+            background-color: var(--mat-sys-surface-container-high);
+        }
+    }
+}
+
+.clear-search-btn {
+    margin-right: 0.5rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #0000000d;
+    }
+}
+
+.empty-text {
+    font-size: 1.2rem;
+    color: #666;
+    text-align: center;
+    margin-top: 2rem;
+}

@@ -24,6 +24,11 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'companies-signals',
+        loadComponent: () => import('./shared/components/companies-table-signals/companies-table-signals.component').then(m => m.CompaniesTableSignalsComponent),
+        canActivate: [authGuard]
+    },
+    {
         path: 'jobs',
         loadComponent: () => import('./shared/components/jobs-table/jobs-table.component').then(m => m.JobsTableComponent),
         canActivate: [authGuard]
