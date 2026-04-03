@@ -24,28 +24,28 @@ import { PaginatedResponse } from '../../models/pagination.model';
   styleUrl: './companies-table-signals.component.scss',
 })
 export class CompaniesTableSignalsComponent {
-  public readonly displayedColumns: string[] = ['company', 'location', 'website', 'open jobs'];
+  readonly displayedColumns: string[] = ['company', 'location', 'website', 'open jobs'];
 
   private readonly companiesService = inject(CompaniesService);
 
-  public searchControl = new FormControl('');
+  searchControl = new FormControl('');
 
-  public pageIndexSignal = signal<number>(0);
-  public pageSizeSignal = signal<number>(10);
-  public searchControlSignal = toSignal(
+  pageIndexSignal = signal<number>(0);
+  pageSizeSignal = signal<number>(10);
+  searchControlSignal = toSignal(
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
       tap(() => this.pageIndexSignal.set(0)),
       startWith('')
     )
   );
-  public querySignal = computed<CompaniesQuery>(() => ({
-    search: this.searchControlSignal() ?? '',
+  querySignal = computed<CompaniesQuery>(() => ({
+    search: this.searchControlSignal() || '',
     page: this.pageIndexSignal() + 1,
     limit: this.pageSizeSignal(),
   }));
 
-  public responseFromService: Signal<PaginatedResponse<Company>> = toSignal(
+  responseFromService: Signal<PaginatedResponse<Company>> = toSignal(
     toObservable(this.querySignal).pipe(
       switchMap(query =>
         this.companiesService.getAll(query)
@@ -55,10 +55,10 @@ export class CompaniesTableSignalsComponent {
     { requireSync: true }
   );
 
-  public companiesSignal = computed<Company[]>(() => this.responseFromService().data ?? []);
-  public totalItemsSignal = computed<number>(() => this.responseFromService().pagination.totalItems ?? 0);
-  public isLoadingSignal = computed<boolean>(() => !this.responseFromService().data);
-  public isEmptySignal = computed<boolean>(() => this.companiesSignal().length === 0);
+  companiesSignal = computed<Company[]>(() => this.responseFromService().data ?? []);
+  totalItemsSignal = computed<number>(() => this.responseFromService().pagination.totalItems ?? 0);
+  isLoadingSignal = computed<boolean>(() => !this.responseFromService().data);
+  isEmptySignal = computed<boolean>(() => this.companiesSignal().length === 0);
 
 
   onPageChange(event: PageEvent) {
