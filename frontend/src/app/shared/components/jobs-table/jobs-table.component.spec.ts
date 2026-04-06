@@ -1,11 +1,11 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { JobsTableComponent } from './jobs-table.component';
 import { JobsQuery, JobsService } from '../../services/job.service';
 import { Observable, of } from 'rxjs';
 import { PaginatedResponse } from '../../models/pagination.model';
 import { Job } from '../../models/job.model';
-import { MatProgressBar, MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
@@ -21,9 +21,9 @@ class MockJobService {
         totalItems: 1,
         itemsPerPage: 10,
         currentPage: 1,
-        totalPages: 1
-      }
-    })
+        totalPages: 1,
+      },
+    });
   }
 }
 
@@ -32,20 +32,24 @@ describe('JobsTableComponent', () => {
   let fixture: ComponentFixture<JobsTableComponent>;
   let service: MockJobService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [JobsTableComponent, MatTableModule, MatPaginatorModule, MatInputModule, MatChipsModule,
-        MatFormFieldModule, MatIconModule, MatProgressBarModule],
-      providers: [{ provide: JobsService, useClass: MockJobService }]
-
-    })
-      .compileComponents();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        JobsTableComponent,
+        MatTableModule,
+        MatPaginatorModule,
+        MatInputModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatProgressBarModule,
+      ],
+      providers: [{ provide: JobsService, useClass: MockJobService }],
+    });
 
     fixture = TestBed.createComponent(JobsTableComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(JobsService);
-
-    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -53,19 +57,19 @@ describe('JobsTableComponent', () => {
   });
 
   it('should call getAll() on component init with no arguments', () => {
-    spyOn(service, 'getAll').and.callThrough();
+    vi.spyOn(service, 'getAll');
 
     fixture.detectChanges();
 
     expect(service.getAll).toHaveBeenCalledWith({
       search: undefined,
       page: 1,
-      limit: 10
+      limit: 10,
     });
   });
 
   it('should data$ (response of getAll()) emits the paginated response returned by the mock', () => {
-    spyOn(service, 'getAll').and.callThrough();
+    vi.spyOn(service, 'getAll');
 
     fixture.detectChanges();
 
@@ -75,42 +79,56 @@ describe('JobsTableComponent', () => {
   });
 
   it('should render in the DOM the search input field', () => {
-    const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input[placeholder="Ex. \'Software Engineer\'"]');
+    const inputElement: HTMLInputElement = fixture.nativeElement.querySelector(
+      'input[placeholder="Ex. \'Software Engineer\'"]',
+    );
     expect(inputElement).toBeTruthy();
   });
 
   it('should onPageChange() calls getAll() with the new page and limit', () => {
-    spyOn(service, 'getAll').and.callThrough();
+    vi.spyOn(service, 'getAll');
 
     component.onPageChange({ pageIndex: 2, pageSize: 20, length: 0 });
 
     expect(service.getAll).toHaveBeenCalledWith({
       search: undefined,
       page: 3,
-      limit: 20
+      limit: 20,
     });
   });
 
   it('should not An empty search value passes undefined as search (not an empty string) to getAll()', () => {
-    spyOn(service, 'getAll').and.callThrough();
+    vi.spyOn(service, 'getAll');
 
     component.searchControl.setValue('');
     component.loadJobs();
     expect(service.getAll).toHaveBeenCalledWith({
       search: undefined,
       page: 1,
-      limit: 10
+      limit: 10,
     });
   });
 
-  it('should not call getAll() a second time during init if the search control hasnt changed', fakeAsync(() => {
-    spyOn(service, 'getAll').and.callThrough();
+  // it('should not call getAll() a second time during init if the search control hasnt changed', fakeAsync(() => {
+  //   vi.spyOn(service, 'getAll');
 
+  //   fixture.detectChanges();
+
+  //   tick(800);
+
+  //   expect(service.getAll).toHaveBeenCalledTimes(1);
+  // }));
+
+  it('should not call getAll() a second time during init if the search control hasnt changed', () => {
+    vi.useFakeTimers();
+
+    vi.spyOn(service, 'getAll');
     fixture.detectChanges();
 
-    tick(800);
+    vi.advanceTimersByTime(800);
 
     expect(service.getAll).toHaveBeenCalledTimes(1);
-  }));
 
+    vi.useRealTimers();
+  });
 });

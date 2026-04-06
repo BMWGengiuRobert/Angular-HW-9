@@ -9,7 +9,7 @@ import { AuthFacade } from "../store/auth/auth.facade";
     template: '<div *appIfCurrentUser="targetId" class="test-element">visible</div>' 
 })
 class HostComponent {
-    targetId: number | undefined | null = null;
+    targetId?: number;
 }
 
 describe('IfCurrentUserDirective', () => {

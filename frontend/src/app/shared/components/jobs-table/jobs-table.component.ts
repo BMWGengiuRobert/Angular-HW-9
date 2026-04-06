@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Subject } from 'rxjs/internal/Subject';
@@ -24,7 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   templateUrl: './jobs-table.component.html',
   styleUrl: './jobs-table.component.scss',
 })
-export class JobsTableComponent {
+export class JobsTableComponent implements OnInit, OnDestroy {
   public readonly displayedColumns: string[] = ['job', 'location', 'type', 'posted'];
   public jobs: Job[] = [];
   public searchControl = new FormControl('');
