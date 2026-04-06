@@ -12,14 +12,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { CommonModule } from '@angular/common';
+
 import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-companies-table',
   imports: [
-    CommonModule, MatTableModule, MatPaginatorModule, MatInputModule, MatChipsModule,
-    MatFormFieldModule, MatIconModule, ReactiveFormsModule, MatProgressBarModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatInputModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatProgressBarModule,
   ],
   templateUrl: './companies-table.component.html',
   styleUrl: './companies-table.component.scss',
@@ -35,19 +41,17 @@ export class CompaniesTableComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
-  private readonly companiesService = inject(CompaniesService)
+  private readonly companiesService = inject(CompaniesService);
 
   ngOnInit(): void {
     this.loadCompanies();
 
-    this.searchControl.valueChanges.pipe(
-      debounceTime(800),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.pageIndex = 0;
-      this.loadCompanies();
-    });
+    this.searchControl.valueChanges
+      .pipe(debounceTime(800), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.pageIndex = 0;
+        this.loadCompanies();
+      });
   }
 
   loadCompanies() {
@@ -60,7 +64,6 @@ export class CompaniesTableComponent implements OnInit, OnDestroy {
     };
 
     this.companiesService.getAll(query).subscribe({
-
       next: (response) => {
         this.companies = response.data;
         this.totalItems = response.pagination.totalItems;
@@ -70,7 +73,7 @@ export class CompaniesTableComponent implements OnInit, OnDestroy {
       error: (err) => {
         console.error('Error loading companies:', err);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -84,5 +87,4 @@ export class CompaniesTableComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 }
