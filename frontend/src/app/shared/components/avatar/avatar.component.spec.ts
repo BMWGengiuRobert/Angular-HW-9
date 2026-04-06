@@ -75,7 +75,7 @@ describe('AvavatarComponent', () => {
     });
 
     it('should fall back to medium size styles if an invalid size is provided', () => {
-        component.size = 'invalid' as any;
+        component.size = 'invalid' as unknown as 'small' | 'medium' | 'large';
         expect(component.sizeStyles).toEqual({ width: '48px', height: '48px', fontSize: '18px' });
     });
 
